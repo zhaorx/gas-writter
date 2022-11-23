@@ -1,0 +1,13 @@
+Name: td-api
+Host: 0.0.0.0
+Port: 6666
+
+TD:
+  Host: 192.168.1.101
+#  Host: 127.0.0.1
+  Port: 6030
+  User: root
+  Password: taosdata
+  MaxOpenConns: 20
+  DataBase: gas
+  STable: gas_data
