@@ -46,7 +46,7 @@ func (l *GasAddLogic) GasAdd(req *types.GasAddRequest) (resp *types.GasAddReply,
 	}
 
 	if rowsAffected == 1 {
-		resp.Message = fmt.Sprintf("insert successed")
+		resp.Message = fmt.Sprintf("insert %d lines successed", rowsAffected)
 	} else {
 		resp.Message = fmt.Sprintf("insert failed:%s", err.Error())
 	}

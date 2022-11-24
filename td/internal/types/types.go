@@ -3,11 +3,11 @@ package types
 
 type GasAddRequest struct {
 	Ts     string  `json:"ts"`
+	Value  float64 `json:"value"`
 	Point  string  `json:"point"`
 	PName  string  `json:"pname"`
 	Unit   string  `json:"unit"`
 	Region string  `json:"region"`
-	Value  float64 `json:"value"`
 }
 
 type GasAddReply struct {
@@ -16,15 +16,15 @@ type GasAddReply struct {
 }
 
 type GasBatchAddRequest struct {
-	Ts       string    `json:"ts"`
-	Interval int       `json:"interval"`
-	Point    string    `json:"point"`
-	PName    string    `json:"pname"`
-	Unit     string    `json:"unit"`
-	Region   string    `json:"region"`
-	Values   []float64 `json:"values"`
+	Tss    []string  `json:"tss"`
+	Values []float64 `json:"values"`
+	Point  string    `json:"point"`
+	PName  string    `json:"pname"`
+	Unit   string    `json:"unit"`
+	Region string    `json:"region"`
 }
 
 type GasBatchAddReply struct {
+	Num     int64  `json:"num"`
 	Message string `json:"message"`
 }

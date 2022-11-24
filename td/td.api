@@ -1,34 +1,35 @@
 service td-api {
 	@handler GasAdd
 	post /gas/add (GasAddRequest) returns (GasAddReply)
-
+	
 	@handler GasBatchAdd
 	post /gas/batch/add (GasBatchAddRequest) returns (GasBatchAddReply)
 }
 
 type GasAddRequest {
-	Ts string `json:"ts"`
-	Value float64 `json:"value"`
-	Point string `json:"point"`
-	PName string `json:"pname"`
-	Unit string `json:"unit"`
-	Region string `json:"region"`
+	Ts     string  `json:"ts"`
+	Value  float64 `json:"value"`
+	Point  string  `json:"point"`
+	PName  string  `json:"pname"`
+	Unit   string  `json:"unit"`
+	Region string  `json:"region"`
 }
 
 type GasAddReply {
-	Num int64 `json:"num"`
+	Num     int64  `json:"num"`
 	Message string `json:"message"`
 }
 
 type GasBatchAddRequest {
-	Tss []string `json:"tss"`
+	Tss    []string  `json:"tss"`
 	Values []float64 `json:"values"`
-	Point string `json:"point"`
-	PName string `json:"pname"`
-	Unit string `json:"unit"`
-	Region string `json:"region"`
+	Point  string    `json:"point"`
+	PName  string    `json:"pname"`
+	Unit   string    `json:"unit"`
+	Region string    `json:"region"`
 }
 
 type GasBatchAddReply {
+	Num     int64  `json:"num"`
 	Message string `json:"message"`
 }
