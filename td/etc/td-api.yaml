@@ -3,9 +3,11 @@ Host: 0.0.0.0
 Port: 6666
 
 TD:
-  Host: 192.168.1.101
+  Host: 10.72.234.78
+#  Host: 192.168.1.101
 #  Host: 127.0.0.1
-  Port: 6030
+  Port: 6041
+#  Port: 6030
   User: root
   Password: taosdata
   MaxOpenConns: 20

@@ -45,6 +45,6 @@ func (l *GasAddLogic) GasAdd(req *types.GasAddRequest) (resp *types.GasAddReply,
 	return &types.GasAddReply{
 		Code:    errorx.OKCode,
 		Num:     rowsAffected,
-		Message: fmt.Sprintf("insert %d lines successed", rowsAffected),
+		Message: fmt.Sprintf("insert %d line successed", rowsAffected),
 	}, nil
 }
