@@ -1,7 +1,7 @@
 service td-api {
 	@handler GasAdd
 	post /gas/add (GasAddRequest) returns (GasAddReply)
-	
+
 	@handler GasBatchAdd
 	post /gas/batch/add (GasBatchAddRequest) returns (GasBatchAddReply)
 }
@@ -16,8 +16,9 @@ type GasAddRequest {
 }
 
 type GasAddReply {
-	Num     int64  `json:"num"`
+	Code    int    `json:"code"`
 	Message string `json:"message"`
+	Num     int64  `json:"num"`
 }
 
 type GasBatchAddRequest {
@@ -30,6 +31,7 @@ type GasBatchAddRequest {
 }
 
 type GasBatchAddReply {
-	Num     int64  `json:"num"`
+	Code    int    `json:"code"`
 	Message string `json:"message"`
+	Num     int64  `json:"num"`
 }

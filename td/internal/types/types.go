@@ -11,6 +11,7 @@ type GasAddRequest struct {
 }
 
 type GasAddReply struct {
+	Code    int    `json:"code"`
 	Num     int64  `json:"num"`
 	Message string `json:"message"`
 }
@@ -25,6 +26,7 @@ type GasBatchAddRequest struct {
 }
 
 type GasBatchAddReply struct {
+	Code    int    `json:"code"`
 	Num     int64  `json:"num"`
 	Message string `json:"message"`
 }

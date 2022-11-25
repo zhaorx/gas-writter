@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 
+	"gas-td-importer/td/internal/common/errorx"
 	"gas-td-importer/td/internal/svc"
 	"gas-td-importer/td/internal/types"
 
@@ -27,7 +28,6 @@ func NewGasBatchAddLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GasBa
 func (l *GasBatchAddLogic) GasBatchAdd(req *types.GasBatchAddRequest) (resp *types.GasBatchAddReply, err error) {
 	c := l.svcCtx.Config
 	taos := l.svcCtx.Engine
-	resp = new(types.GasBatchAddReply)
 	insert_sql := `INSERT INTO %s.%s USING %s.%s TAGS('%s', '%s', '%s', '%s') VALUES `
 
 	// 拼接多value insert
@@ -39,22 +39,17 @@ func (l *GasBatchAddLogic) GasBatchAdd(req *types.GasBatchAddRequest) (resp *typ
 	result, err := taos.Exec(sql)
 	if err != nil {
 		l.Logger.Error("insert failed: " + sql)
-		fmt.Println("failed to insert, err:", err)
-		resp.Message = fmt.Sprintf("insert failed:%s", err.Error())
-		return
+		return nil, errorx.NewDefaultError(err.Error())
 	}
 
 	rowsAffected, err := result.RowsAffected()
-	resp.Num = rowsAffected
 	if err != nil {
-		fmt.Println("failed to get affected rows, err:", err)
+		return nil, errorx.NewDefaultError(err.Error())
 	}
 
-	if rowsAffected >= 1 {
-		resp.Message = fmt.Sprintf("insert %d lines successed", rowsAffected)
-	} else {
-		resp.Message = fmt.Sprintf("insert failed:%s", err.Error())
-	}
-
-	return
+	return &types.GasBatchAddReply{
+		Code:    errorx.OKCode,
+		Num:     rowsAffected,
+		Message: fmt.Sprintf("insert %d lines successed", rowsAffected),
+	}, nil
 }
