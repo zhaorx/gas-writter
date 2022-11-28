@@ -1,9 +1,32 @@
 service td-api {
+	@handler GasList
+	get /gas/list (GasListRequest) returns (GasListReply)
+	
 	@handler GasAdd
 	post /gas/add (GasAddRequest) returns (GasAddReply)
-
+	
 	@handler GasBatchAdd
 	post /gas/batch/add (GasBatchAddRequest) returns (GasBatchAddReply)
+}
+
+type Gas {
+	Ts     string  `json:"ts"`
+	Value  float64 `json:"value"`
+	Point  string  `json:"point"`
+	PName  string  `json:"pname"`
+	Unit   string  `json:"unit"`
+	Region string  `json:"region"`
+}
+
+type GasListRequest {
+	TsStart string `json:"ts_start,optional"`
+	TsEnd   string `json:"ts_end,optional"`
+}
+
+type GasListReply {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	List    []*Gas `json:"list"`
 }
 
 type GasAddRequest {

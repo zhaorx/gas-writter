@@ -13,6 +13,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				Method:  http.MethodGet,
+				Path:    "/gas/list",
+				Handler: GasListHandler(serverCtx),
+			},
+			{
 				Method:  http.MethodPost,
 				Path:    "/gas/add",
 				Handler: GasAddHandler(serverCtx),
