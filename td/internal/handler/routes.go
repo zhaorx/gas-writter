@@ -13,6 +13,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 	server.AddRoutes(
 		[]rest.Route{
 			{
+				Method:  http.MethodPost,
+				Path:    "/qh/data",
+				Handler: QhDataHandler(serverCtx),
+			},
+			{
 				Method:  http.MethodGet,
 				Path:    "/gas/list",
 				Handler: GasListHandler(serverCtx),

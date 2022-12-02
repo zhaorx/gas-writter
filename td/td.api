@@ -1,4 +1,7 @@
 service td-api {
+	@handler QhData
+	post /qh/data (QhDataRequest) returns (QhDataReply)
+	
 	@handler GasList
 	get /gas/list (GasListRequest) returns (GasListReply)
 	
@@ -8,6 +11,13 @@ service td-api {
 	@handler GasBatchAdd
 	post /gas/batch/add (GasBatchAddRequest) returns (GasBatchAddReply)
 }
+
+type (
+	QhDataRequest {
+	}
+	QhDataReply {
+	}
+)
 
 type Gas {
 	Ts     string  `json:"ts"`
