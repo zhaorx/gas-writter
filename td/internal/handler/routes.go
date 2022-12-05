@@ -14,8 +14,8 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 		[]rest.Route{
 			{
 				Method:  http.MethodPost,
-				Path:    "/qh/data",
-				Handler: QhDataHandler(serverCtx),
+				Path:    "/mock/data",
+				Handler: MockDataHandler(serverCtx),
 			},
 			{
 				Method:  http.MethodGet,

@@ -1,6 +1,6 @@
 service td-api {
-	@handler QhData
-	post /qh/data (QhDataRequest) returns (QhDataReply)
+	@handler MockData
+	post /mock/data (MockDataRequest) returns (MockDataReply)
 	
 	@handler GasList
 	get /gas/list (GasListRequest) returns (GasListReply)
@@ -13,9 +13,9 @@ service td-api {
 }
 
 type (
-	QhDataRequest {
+	MockDataRequest {
 	}
-	QhDataReply {
+	MockDataReply {
 	}
 )
 
