@@ -1,15 +1,18 @@
 service td-api {
 	@handler MockData
 	post /mock/data (MockDataRequest) returns (MockDataReply)
-	
+
 	@handler GasList
 	get /gas/list (GasListRequest) returns (GasListReply)
-	
+
 	@handler GasAdd
 	post /gas/add (GasAddRequest) returns (GasAddReply)
-	
+
 	@handler GasBatchAdd
 	post /gas/batch/add (GasBatchAddRequest) returns (GasBatchAddReply)
+
+	@handler GasMultiAdd
+	post /gas/multi/add (GasMultiAddRequest) returns (GasMultiAddReply)
 }
 
 type (
@@ -64,6 +67,16 @@ type GasBatchAddRequest {
 }
 
 type GasBatchAddReply {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Num     int64  `json:"num"`
+}
+
+type GasMultiAddRequest {
+	GasList []Gas  `json:"gasList"`
+}
+
+type GasMultiAddReply {
 	Code    int    `json:"code"`
 	Message string `json:"message"`
 	Num     int64  `json:"num"`

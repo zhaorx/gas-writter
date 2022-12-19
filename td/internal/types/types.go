@@ -56,3 +56,13 @@ type GasBatchAddReply struct {
 	Message string `json:"message"`
 	Num     int64  `json:"num"`
 }
+
+type GasMultiAddRequest struct {
+	GasList []Gas `json:"gasList"`
+}
+
+type GasMultiAddReply struct {
+	Code    int    `json:"code"`
+	Message string `json:"message"`
+	Num     int64  `json:"num"`
+}

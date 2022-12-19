@@ -32,6 +32,11 @@ func RegisterHandlers(server *rest.Server, serverCtx *svc.ServiceContext) {
 				Path:    "/gas/batch/add",
 				Handler: GasBatchAddHandler(serverCtx),
 			},
+			{
+				Method:  http.MethodPost,
+				Path:    "/gas/multi/add",
+				Handler: GasMultiAddHandler(serverCtx),
+			},
 		},
 	)
 }
