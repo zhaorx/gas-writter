@@ -42,7 +42,7 @@ func (l *GasMultiAddLogic) GasMultiAdd(req *types.GasMultiAddRequest) (resp *typ
 
 	}
 
-	fmt.Println("sql:", sql)
+	//fmt.Println("sql:", sql)
 	result, err := taos.Exec(sql)
 	if err != nil {
 		l.Logger.Error("insert failed: " + sql)
