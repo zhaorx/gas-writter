@@ -30,7 +30,7 @@ func (l *GasMultiAddLogic) GasMultiAdd(req *types.GasMultiAddRequest) (resp *typ
 	taos := l.svcCtx.Engine
 
 	sql := `INSERT INTO `
-	repeat_sql := `%s.%s USING %s.%s TAGS('%s', '%s', '%s', '%s') VALUES `
+	repeat_sql := `%s.%s USING %s.%s (point, pname, unit, region) TAGS('%s', '%s', '%s', '%s') VALUES `
 
 	// 遍历gasList 拼接多value insert
 	for i := 0; i < len(req.GasList); i++ {
@@ -59,6 +59,4 @@ func (l *GasMultiAddLogic) GasMultiAdd(req *types.GasMultiAddRequest) (resp *typ
 		Num:     rowsAffected,
 		Message: fmt.Sprintf("insert %d lines successed", rowsAffected),
 	}, nil
-
-	return
 }

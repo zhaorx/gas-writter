@@ -7,6 +7,7 @@ import (
 	"gas-td-importer/td/internal/config"
 	"gas-td-importer/td/internal/handler"
 	"gas-td-importer/td/internal/svc"
+	"github.com/zeromicro/go-zero/core/logx"
 
 	"github.com/zeromicro/go-zero/core/conf"
 	"github.com/zeromicro/go-zero/rest"
@@ -27,5 +28,7 @@ func main() {
 	handler.RegisterHandlers(server, ctx)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
+
+	logx.DisableStat()
 	server.Start()
 }

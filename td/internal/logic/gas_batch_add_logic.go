@@ -28,7 +28,7 @@ func NewGasBatchAddLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GasBa
 func (l *GasBatchAddLogic) GasBatchAdd(req *types.GasBatchAddRequest) (resp *types.GasBatchAddReply, err error) {
 	c := l.svcCtx.Config
 	taos := l.svcCtx.Engine
-	insert_sql := `INSERT INTO %s.%s USING %s.%s TAGS('%s', '%s', '%s', '%s') VALUES `
+	insert_sql := `INSERT INTO %s.%s USING %s.%s (point, pname, unit, region) TAGS('%s', '%s', '%s', '%s') VALUES `
 
 	// 拼接多value insert
 	suffix := ""
