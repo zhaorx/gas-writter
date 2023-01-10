@@ -28,7 +28,7 @@ func NewGasListLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GasListLo
 
 func (l *GasListLogic) GasList(req *types.GasListRequest) (resp *types.GasListReply, err error) {
 	c := l.svcCtx.Config
-	taos := l.svcCtx.Engine
+	taos := l.svcCtx.TaosEngine
 
 	query_sql := `SELECT * FROM %s.%s where ts >= '%s' AND ts <= '%s'`
 	sql := fmt.Sprintf(query_sql, c.TD.DataBase, c.TD.STable, req.TsStart, req.TsEnd)

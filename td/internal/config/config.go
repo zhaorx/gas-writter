@@ -14,4 +14,14 @@ type Config struct {
 		DataBase     string
 		STable       string
 	}
+
+	DB struct {
+		PointsTable   string
+		PointsMapBeat int
+		Host          string
+		Port          int
+		ServiceName   string
+		Username      string
+		Password      string
+	}
 }

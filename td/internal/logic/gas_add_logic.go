@@ -27,7 +27,7 @@ func NewGasAddLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GasAddLogi
 
 func (l *GasAddLogic) GasAdd(req *types.GasAddRequest) (resp *types.GasAddReply, err error) {
 	c := l.svcCtx.Config
-	taos := l.svcCtx.Engine
+	taos := l.svcCtx.TaosEngine
 
 	insert_sql := `INSERT INTO %s.%s USING %s.%s (point, pname, unit, region) TAGS('%s', '%s', '%s', '%s') VALUES ('%s', %f)`
 	sql := fmt.Sprintf(insert_sql, c.TD.DataBase, req.Point, c.TD.DataBase, c.TD.STable, req.Point, req.PName, req.Unit, req.Region, req.Ts, req.Value)
