@@ -47,9 +47,9 @@ func (l *GasMultiAddLogic) GasMultiAdd(req *types.GasMultiAddRequest) (resp *typ
 		}
 
 		// 单位转换
-		fmt.Println(item.Value)
+		//fmt.Println(item.Value)
 		models.ConvertUnit(&pi, &item)
-		fmt.Println(item.Value)
+		//fmt.Println(item.Value)
 
 		table_sql := fmt.Sprintf(repeat_sql, c.TD.DataBase, item.Point, c.TD.DataBase, c.TD.STable, pi.Point, pi.Pname, pi.Unit,
 			pi.Region, pi.Gases, pi.Gas, pi.Site, pi.Pipeline, pi.Uptype, pi.Ptype)

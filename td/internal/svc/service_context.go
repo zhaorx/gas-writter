@@ -20,7 +20,7 @@ func NewServiceContext(c config.Config) *ServiceContext {
 	models.InitPointsMap(db, c)
 
 	// 定期更新PointsMap
-	go models.RefreshPointsMap(db, c)
+	go models.SyncPointsMap(db, c)
 
 	return &ServiceContext{
 		Config:     c,

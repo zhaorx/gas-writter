@@ -16,7 +16,7 @@ import (
 )
 
 var PMap = make(map[string]PointInfo) // 全局唯一线程安全PointsMap
-var PLocker sync.RWMutex
+var PLocker sync.RWMutex              // PMap读写锁
 
 // InitDB 初始化关系库连接
 func InitDB(c config.Config) *sqlx.DB {
@@ -35,7 +35,7 @@ func InitDB(c config.Config) *sqlx.DB {
 	return db
 }
 
-func RefreshPointsMap(db *sqlx.DB, c config.Config) {
+func SyncPointsMap(db *sqlx.DB, c config.Config) {
 	// 周期性调用获取并保存数据
 	beat := 0
 	if c.DB.PointsMapBeat <= 0 {
@@ -45,7 +45,7 @@ func RefreshPointsMap(db *sqlx.DB, c config.Config) {
 	}
 	ticker := time.Tick(time.Duration(beat) * time.Minute)
 	for _ = range ticker {
-		log.Println("RefreshPointsMap")
+		log.Println("SyncPointsMap")
 		InitPointsMap(db, c)
 	}
 }
