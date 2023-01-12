@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"log"
+	"strings"
 
 	"gas-td-importer/td/internal/common/errorx"
 	"gas-td-importer/td/internal/models"
@@ -35,6 +36,8 @@ func (l *GasMultiAddLogic) GasMultiAdd(req *types.GasMultiAddRequest) (resp *typ
 	repeat_sql := `%s.%s USING %s.%s (point, pname, unit, region, gases, gas, site, pipeline, uptype, ptype) TAGS('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s') VALUES `
 
 	// 遍历gasList 拼接多value insert
+	errFlag := false
+	errPoints := make([]string, 0)
 	models.PLocker.RLock() // get读锁
 	for i := 0; i < len(req.GasList); i++ {
 		item := req.GasList[i]
@@ -42,24 +45,36 @@ func (l *GasMultiAddLogic) GasMultiAdd(req *types.GasMultiAddRequest) (resp *typ
 		// 根据point查询PointInfo
 		pi, ok := models.PMap[item.Point]
 		if !ok {
-			log.Printf("找不到%s点位的PointInfo\n", item.Point)
+			errFlag = true
+			errPoints = append(errPoints, item.Point)
 			continue
 		}
 
 		// 单位转换
-		//fmt.Println(item.Value)
 		models.ConvertUnit(&pi, &item)
-		//fmt.Println(item.Value)
 
 		table_sql := fmt.Sprintf(repeat_sql, c.TD.DataBase, item.Point, c.TD.DataBase, c.TD.STable, pi.Point, pi.Pname, pi.Unit,
 			pi.Region, pi.Gases, pi.Gas, pi.Site, pi.Pipeline, pi.Uptype, pi.Ptype)
 		values_sql := fmt.Sprintf(`('%s', %f) `, item.Ts, item.Value)
 		sql += table_sql + values_sql
-
 	}
 	models.PLocker.RUnlock()
+	//fmt.Println("sql:", sql)
 
-	fmt.Println("sql:", sql)
+	// 判断中间是否有某个点找不到PointInfo
+	if errFlag {
+		ps := strings.Join(errPoints, ",")
+
+		err := errorx.NewDefaultError(fmt.Sprintf("找不到 %s 等点位的PointInfo", ps))
+		log.Println(err.Error())
+		return &types.GasMultiAddReply{
+			Code:    errorx.DefaultErrorCode,
+			Num:     0,
+			Message: err.Error(),
+		}, nil
+	}
+
+	// 正常执行sql
 	result, err := taos.Exec(sql)
 	if err != nil {
 		l.Logger.Error("insert failed: " + sql)

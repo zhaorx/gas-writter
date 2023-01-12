@@ -2,7 +2,7 @@ package errorx
 
 const (
 	OKCode           = 200
-	defaultErrorCode = 500
+	DefaultErrorCode = 500
 )
 
 type CodeError struct {
@@ -20,7 +20,7 @@ func NewCodeError(code int, msg string) error {
 }
 
 func NewDefaultError(msg string) error {
-	return NewCodeError(defaultErrorCode, msg)
+	return NewCodeError(DefaultErrorCode, msg)
 }
 
 func (e *CodeError) Error() string {

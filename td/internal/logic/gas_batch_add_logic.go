@@ -3,8 +3,10 @@ package logic
 import (
 	"context"
 	"fmt"
+	"log"
 
 	"gas-td-importer/td/internal/common/errorx"
+	"gas-td-importer/td/internal/models"
 	"gas-td-importer/td/internal/svc"
 	"gas-td-importer/td/internal/types"
 
@@ -28,14 +30,37 @@ func NewGasBatchAddLogic(ctx context.Context, svcCtx *svc.ServiceContext) *GasBa
 func (l *GasBatchAddLogic) GasBatchAdd(req *types.GasBatchAddRequest) (resp *types.GasBatchAddReply, err error) {
 	c := l.svcCtx.Config
 	taos := l.svcCtx.TaosEngine
-	insert_sql := `INSERT INTO %s.%s USING %s.%s (point, pname, unit, region) TAGS('%s', '%s', '%s', '%s') VALUES `
+
+	// 根据point查询PointInfo
+	models.PLocker.RLock() // get读锁
+	pi, ok := models.PMap[req.Point]
+	models.PLocker.RUnlock()
+	if !ok {
+		err := errorx.NewDefaultError(fmt.Sprintf("找不到%s点位的PointInfo", req.Point))
+		log.Println(err.Error())
+		return &types.GasBatchAddReply{
+			Code:    errorx.DefaultErrorCode,
+			Num:     0,
+			Message: err.Error(),
+		}, nil
+	}
 
 	// 拼接多value insert
 	suffix := ""
 	for i := 0; i < len(req.Tss); i++ {
-		suffix += fmt.Sprintf(`('%s', %f)`, req.Tss[i], req.Values[i])
+		gas := types.Gas{
+			Ts:    req.Tss[i],
+			Value: req.Values[i],
+			Point: req.Point,
+		}
+
+		// 单位转换
+		models.ConvertUnit(&pi, &gas)
+		suffix += fmt.Sprintf(`('%s', %f)`, gas.Ts, gas.Value)
 	}
-	sql := fmt.Sprintf(insert_sql, c.TD.DataBase, req.Point, c.TD.DataBase, c.TD.STable, req.Point, req.PName, req.Unit, req.Region) + suffix
+
+	insert_sql := `INSERT INTO %s.%s USING %s.%s (point, pname, unit, region, gases, gas, site, pipeline, uptype, ptype) TAGS('%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s') VALUES `
+	sql := fmt.Sprintf(insert_sql, c.TD.DataBase, req.Point, c.TD.DataBase, c.TD.STable, pi.Point, pi.Pname, pi.Unit, pi.Region, pi.Gases, pi.Gas, pi.Site, pi.Pipeline, pi.Uptype, pi.Ptype) + suffix
 	result, err := taos.Exec(sql)
 	if err != nil {
 		l.Logger.Error("insert failed: " + sql)
