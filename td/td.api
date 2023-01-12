@@ -1,16 +1,16 @@
 service td-api {
 	@handler MockData
 	post /mock/data (MockDataRequest) returns (MockDataReply)
-
+	
 	@handler GasList
 	get /gas/list (GasListRequest) returns (GasListReply)
-
+	
 	@handler GasAdd
 	post /gas/add (GasAddRequest) returns (GasAddReply)
-
+	
 	@handler GasBatchAdd
 	post /gas/batch/add (GasBatchAddRequest) returns (GasBatchAddReply)
-
+	
 	@handler GasMultiAdd
 	post /gas/multi/add (GasMultiAddRequest) returns (GasMultiAddReply)
 }
@@ -26,9 +26,9 @@ type Gas {
 	Ts     string  `json:"ts"`
 	Value  float64 `json:"value"`
 	Point  string  `json:"point"`
-	PName  string  `json:"pname"`
-	Unit   string  `json:"unit"`
-	Region string  `json:"region"`
+	PName  string  `json:"pname,optional"`
+	Unit   string  `json:"unit,optional"`
+	Region string  `json:"region,optional"`
 }
 
 type GasListRequest {
@@ -73,7 +73,7 @@ type GasBatchAddReply {
 }
 
 type GasMultiAddRequest {
-	GasList []Gas  `json:"gasList"`
+	GasList []Gas `json:"gasList"`
 }
 
 type GasMultiAddReply {

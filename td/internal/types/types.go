@@ -11,9 +11,9 @@ type Gas struct {
 	Ts     string  `json:"ts"`
 	Value  float64 `json:"value"`
 	Point  string  `json:"point"`
-	PName  string  `json:"pname"`
-	Unit   string  `json:"unit"`
-	Region string  `json:"region"`
+	PName  string  `json:"pname,optional"`
+	Unit   string  `json:"unit,optional"`
+	Region string  `json:"region,optional"`
 }
 
 type GasListRequest struct {
