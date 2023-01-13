@@ -95,15 +95,18 @@ func queryPointsRows(db *sqlx.DB, table string) (*sqlx.Rows, error) {
 	return rows, nil
 }
 
-// 数值单位转换
+// 数值单位转换 流量标准单位E4Nm3/h 压力标准单位MPa 其他单位都往标准单位转
 func ConvertUnit(p *PointInfo, g *types.Gas) {
 	switch p.Unit {
+	case "Nm3/h":
+		p.Unit = "E4Nm3/h"
+		g.Value, _ = strconv.ParseFloat(strconv.FormatFloat(g.Value/10000, 'f', 2, 64), 64)
 	case "Nm3/d":
-		p.Unit = "Nm3/h"
-		g.Value = g.Value * 24
+		p.Unit = "E4Nm3/h"
+		g.Value, _ = strconv.ParseFloat(strconv.FormatFloat(g.Value/24/10000, 'f', 2, 64), 64)
 	case "E4Nm3/d":
-		p.Unit = "Nm3/h"
-		g.Value = g.Value * 24 * 10000
+		p.Unit = "E4Nm3/h"
+		g.Value, _ = strconv.ParseFloat(strconv.FormatFloat(g.Value/24, 'f', 2, 64), 64)
 	case "kPa":
 		p.Unit = "MPa"
 		g.Value, _ = strconv.ParseFloat(strconv.FormatFloat(g.Value/1000, 'f', 2, 64), 64)
