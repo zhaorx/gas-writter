@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"fmt"
-	"log"
 	"strings"
 
 	"gas-td-importer/td/internal/common/errorx"
@@ -66,7 +65,7 @@ func (l *GasMultiAddLogic) GasMultiAdd(req *types.GasMultiAddRequest) (resp *typ
 		ps := strings.Join(errPoints, ",")
 
 		err := errorx.NewDefaultError(fmt.Sprintf("找不到 %s 等点位的PointInfo", ps))
-		log.Println(err.Error())
+		l.Logger.Errorf(err.Error())
 		return &types.GasMultiAddReply{
 			Code:    errorx.DefaultErrorCode,
 			Num:     0,

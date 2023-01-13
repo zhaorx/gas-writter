@@ -1,3 +1,5 @@
 .idea
 *.exe
-linux/
+linux
+logs
+log

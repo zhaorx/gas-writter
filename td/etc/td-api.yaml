@@ -2,6 +2,11 @@ Name: gas-writter
 Host: 0.0.0.0
 Port: 6666
 
+Log:
+  Mode: file
+  Level: info
+  KeepDays: 30
+
 # taos
 TD:
   Host: 10.72.234.78
@@ -16,7 +21,7 @@ TD:
 DB:
   PointsTable: POINT_TB
   PointsMapBeat: 60
-  Host: 192.168.1.12
+  Host: 192.168.1.123
   Port: 1521
   ServiceName: ORCL
   Username: GAS

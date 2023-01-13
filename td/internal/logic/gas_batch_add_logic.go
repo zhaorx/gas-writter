@@ -3,7 +3,6 @@ package logic
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"gas-td-importer/td/internal/common/errorx"
 	"gas-td-importer/td/internal/models"
@@ -37,7 +36,7 @@ func (l *GasBatchAddLogic) GasBatchAdd(req *types.GasBatchAddRequest) (resp *typ
 	models.PLocker.RUnlock()
 	if !ok {
 		err := errorx.NewDefaultError(fmt.Sprintf("找不到%s点位的PointInfo", req.Point))
-		log.Println(err.Error())
+		l.Logger.Errorf(err.Error())
 		return &types.GasBatchAddReply{
 			Code:    errorx.DefaultErrorCode,
 			Num:     0,

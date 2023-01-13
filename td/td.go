@@ -7,9 +7,8 @@ import (
 	"gas-td-importer/td/internal/config"
 	"gas-td-importer/td/internal/handler"
 	"gas-td-importer/td/internal/svc"
-	"github.com/zeromicro/go-zero/core/logx"
-
 	"github.com/zeromicro/go-zero/core/conf"
+	"github.com/zeromicro/go-zero/core/logx"
 	"github.com/zeromicro/go-zero/rest"
 )
 
@@ -21,14 +20,18 @@ func main() {
 	var c config.Config
 	conf.MustLoad(*configFile, &c)
 
+	// 日志
+	logx.DisableStat()
+	logx.MustSetup(c.Log)
+	//logx.CollectSysLog()
+
 	ctx := svc.NewServiceContext(c)
 	server := rest.MustNewServer(c.RestConf)
+	defer ctx.DBEngine.Close() // 程序退出时关闭库连接
 	defer server.Stop()
 
 	handler.RegisterHandlers(server, ctx)
 
 	fmt.Printf("Starting server at %s:%d...\n", c.Host, c.Port)
-
-	logx.DisableStat()
 	server.Start()
 }

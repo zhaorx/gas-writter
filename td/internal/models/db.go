@@ -24,12 +24,12 @@ func InitDB(c config.Config) *sqlx.DB {
 	var err error
 	db, err := sqlx.Open("godror", dsn)
 	if err != nil {
-		log.Fatal("db init error:%v", err)
+		log.Fatalf("db init error:%v", err)
 	}
 	//defer db.Close()
 	err = db.Ping()
 	if err != nil {
-		log.Fatal("db init error:%v", err)
+		log.Fatalf("db init error:%v", err)
 	}
 	log.Println("db init success")
 	return db
@@ -44,7 +44,7 @@ func SyncPointsMap(db *sqlx.DB, c config.Config) {
 		beat = c.DB.PointsMapBeat
 	}
 	ticker := time.Tick(time.Duration(beat) * time.Minute)
-	for _ = range ticker {
+	for range ticker {
 		log.Println("SyncPointsMap")
 		InitPointsMap(db, c)
 	}
@@ -65,7 +65,7 @@ func InitPointsMap(db *sqlx.DB, c config.Config) {
 	for rows.Next() {
 		var p PointInfo
 		if err := rows.StructScan(&p); err != nil {
-			log.Fatal("PointsMap iterate error：" + err.Error())
+			log.Fatalf("PointsMap iterate error：" + err.Error())
 		}
 
 		PMap[p.Point] = p
@@ -76,7 +76,7 @@ func InitPointsMap(db *sqlx.DB, c config.Config) {
 	if err := rows.Err(); err != nil {
 		log.Fatal("PointsMap iterate error：" + err.Error())
 	}
-	fmt.Println("PointsMap's length is ", count)
+	log.Println("PointsMap's length is ", count)
 	if count == 0 {
 		log.Fatal("PointsMap's length is 0")
 	}
